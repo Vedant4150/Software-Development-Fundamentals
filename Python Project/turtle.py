@@ -1,10 +1,16 @@
-import turtle
+import sys
+
+try:
+    import turtle
+except ImportError:
+    print("The turtle module is not installed. Please install it before running this script.")
+    sys.exit(1)
 
 # Set up the screen
 screen = turtle.Screen()
 screen.bgcolor("black")
 screen.title("Bouncing Ball Animation")
-screen.tracer(0)  # Turns off the screen updates
+screen.tracer(0)  # Turns off the screen updates for better performance
 
 # Create a turtle object for the ball
 ball = turtle.Turtle()
@@ -15,7 +21,7 @@ ball.speed(0)
 
 # Set the initial position and velocity of the ball
 ball.goto(0, 200)
-dx, dy = 2, -2  # Velocity components in the x and y directions
+dx, dy = 2, -2  # Initial velocity components in the x and y directions
 
 # Define the boundaries of the screen
 screen_width = screen.window_width() / 2
@@ -25,11 +31,25 @@ screen_height = screen.window_height() / 2
 def quit_animation():
     screen.bye()
 
-# Bind the exit function to a key press, e.g., "q" for quit
+# Function to increase speed
+def increase_speed():
+    global dx, dy
+    dx *= 1.1
+    dy *= 1.1
+
+# Function to decrease speed
+def decrease_speed():
+    global dx, dy
+    dx *= 0.9
+    dy *= 0.9
+
+# Bind the exit function to a key press
 screen.onkeypress(quit_animation, "q")
+screen.onkeypress(increase_speed, "Up")
+screen.onkeypress(decrease_speed, "Down")
 screen.listen()
 
-# Animation loop
+# Main animation loop
 while True:
     # Move the ball
     ball.setx(ball.xcor() + dx)
@@ -43,4 +63,5 @@ while True:
 
     screen.update()  # Only update the screen after changes
 
+# Keep the window open until it is closed by the user
 screen.mainloop()
